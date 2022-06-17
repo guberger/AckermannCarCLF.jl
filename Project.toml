@@ -1,0 +1,4 @@
+name = "AckermannCarCLF"
+uuid = "5c2574be-2217-44c7-bda8-196df1ac50aa"
+authors = ["guberger@PC-1r0-013 <guillaume.berger@uclouvain.be>"]
+version = "0.1.0"
