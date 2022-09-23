@@ -28,8 +28,10 @@ waypoints = [x_path(s) for s in range(0, 2π, length=nsample)]
 fig = figure(0)
 ax = fig.add_subplot()
 
-ax.set_xlabel("x", fontsize=15)
-ax.set_ylabel("y", fontsize=15)
+ax.set_xticks(())
+ax.set_yticks(())
+# ax.set_xlabel("x", fontsize=15)
+# ax.set_ylabel("y", fontsize=15)
 
 ax.plot(
     getindex.(waypoints, 1), getindex.(waypoints, 2), marker=".", 
@@ -42,7 +44,7 @@ nstep = ceil(Int, tmax/dt)
 umax = π/4
 ninp = 31
 horiz = 20
-x0, y0 = waypoints[1] .+ (0.3, 0.0)
+x0, y0 = waypoints[1] .+ (0.9, 0.0)
 θ0 = π/2
 state_list = ACC.simulate_path(
     car, V, waypoints, x0, y0, θ0, dt, nstep, umax, ninp, horiz
@@ -65,6 +67,18 @@ hpoint.set_linestyle("none")
 hpoint.set_color("r")
 hpoint.set_marker(".")
 hpoint.set_markersize(10)
+verts_ = (
+    ((-1, -1), (-1, 1), (1, 1), (1, -1), (-1, -1)),
+    ((-7, -5), (-7, -3), (-3, -3), (-3, -5), (-7, -5)),
+    ((7, 5), (7, 3), (3, 3), (3, 5), (7, 5)),
+    ((-7, 5), (-7, 3), (-3, 3), (-3, 5), (-7, 5)),
+    ((7, -5), (7, -3), (3, -3), (3, -5), (7, -5))
+)
+polylist = matplotlib.collections.PolyCollection(verts_)
+polylist.set_facecolor("r")
+polylist.set_edgecolor("r")
+polylist.set_linewidth(1.0)
+ax.add_collection(polylist)
 
 iter = 0
 
@@ -80,15 +94,14 @@ for state in state_list
     fig.canvas.draw()
     fig.canvas.flush_events()
     filename = string("./figs/animation_simupath/frame_", iter, ".png")
-    fig.savefig(filename, dpi=100)
+    # fig.savefig(filename, dpi=100)
 end
 
-# ax.plot(getindex.(state_list, 1), getindex.(state_list, 2))
+ax.plot(getindex.(state_list, 1), getindex.(state_list, 2))
 
 fig.savefig(
     "./figs/test_simupath.png",
     dpi=200, transparent=false, bbox_inches="tight"
 )
-
 
 end # module
